@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تمارين تقويمية للأشكال ثلاثية الأبعاد</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            direction: rtl;
+            text-align: right;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .exercise-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .control-btn.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+
+        .exercise-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .exercise-counter {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .score-display {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .question-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .question-text {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .question-image {
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            margin: 15px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .option.selected {
+            background: rgba(33, 150, 243, 0.4);
+            border-color: rgba(33, 150, 243, 0.8);
+        }
+
+        .option.correct {
+            background: rgba(76, 175, 80, 0.4);
+            border-color: rgba(76, 175, 80, 0.8);
+        }
+
+        .option.wrong {
+            background: rgba(244, 67, 54, 0.4);
+            border-color: rgba(244, 67, 54, 0.8);
+        }
+
+        .input-container {
+            margin: 20px 0;
+        }
+
+        .math-input {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 1.2em;
+            color: #333;
+            width: 200px;
+            text-align: center;
+            margin: 0 10px;
+        }
+
+        .math-input:focus {
+            outline: none;
+            border-color: #2196F3;
+            box-shadow: 0 0 10px rgba(33, 150, 243, 0.3);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 12px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .next-btn {
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+            color: white;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        }
+
+        .restart-btn {
+            background: linear-gradient(45deg, #FF9800, #F57C00);
+            color: white;
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .feedback.correct {
+            background: rgba(76, 175, 80, 0.2);
+            border: 2px solid rgba(76, 175, 80, 0.5);
+            color: #4CAF50;
+        }
+
+        .feedback.wrong {
+            background: rgba(244, 67, 54, 0.2);
+            border: 2px solid rgba(244, 67, 54, 0.5);
+            color: #f44336;
+        }
+
+        .final-score {
+            text-align: center;
+            font-size: 2em;
+            margin: 30px 0;
+        }
+
+        .score-excellent {
+            color: #4CAF50;
+        }
+
+        .score-good {
+            color: #2196F3;
+        }
+
+        .score-needs-improvement {
+            color: #FF9800;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #2196F3);
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+
+        .exercise-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .exercise-type {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .exercise-type:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .exercise-type.selected {
+            background: rgba(33, 150, 243, 0.4);
+            border-color: rgba(33, 150, 243, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            
+            .control-btn, .action-btn {
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+            
+            .question-image {
+                width: 150px;
+                height: 150px;
+                font-size: 3em;
+            }
+            
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .formula-display {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧮 تمارين تقويمية للأشكال ثلاثية الأبعاد</h1>
+        
+        <div class="exercise-controls">
+            <button class="control-btn" id="start-btn">🚀 بدء التمارين</button>
+            <button class="control-btn" id="settings-btn">⚙ إعدادات</button>
+            <button class="control-btn" id="help-btn">❓ مساعدة</button>
+        </div>
+
+        <!-- شاشة اختيار نوع التمارين -->
+        <div id="exercise-selection" class="exercise-container">
+            <h2 style="text-align: center; margin-bottom: 20px;">اختر نوع التمارين</h2>
+            <div class="exercise-types">
+                <div class="exercise-type" data-type="identification">
+                    <h3>🔍 تحديد الأشكال</h3>
+                    <p>تعرف على أنواع الأشكال ثلاثية الأبعاد</p>
+                </div>
+                <div class="exercise-type" data-type="properties">
+                    <h3>📊 خصائص الأشكال</h3>
+                    <p>عدد الأوجه والحواف والرؤوس</p>
+                </div>
+                <div class="exercise-type" data-type="volume">
+                    <h3>📏 حساب الحجم</h3>
+                    <p>تطبيق قوانين حساب الحجم</p>
+                </div>
+                <div class="exercise-type" data-type="surface">
+                    <h3>📐 المساحة السطحية</h3>
+                    <p>حساب المساحة الكلية للأشكال</p>
+                </div>
+                <div class="exercise-type" data-type="mixed">
+                    <h3>🔄 تمارين متنوعة</h3>
+                    <p>مزيج من جميع أنواع التمارين</p>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="action-btn submit-btn" id="select-type-btn" disabled>اختيار نوع التمرين</button>
+            </div>
+        </div>
+
+        <!-- شاشة التمارين -->
+        <div id="exercise-area" class="exercise-container" style="display: none;">
+            <div class="exercise-header">
+                <div class="exercise-counter">السؤال <span id="current-question">1</span> من <span id="total-questions">10</span></div>
+                <div class="score-display">النتيجة: <span id="current-score">0</span>/<span id="max-score">0</span></div>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+
+            <div class="question-container">
+                <div class="question-text" id="question-text"></div>
+                <div class="question-image" id="question-image"></div>
+                <div class="formula-display" id="formula-display" style="display: none;"></div>
+                
+                <div class="options-container" id="options-container"></div>
+                
+                <div class="input-container" id="input-container" style="display: none;">
+                    <input type="number" class="math-input" id="answer-input" placeholder="أدخل الإجابة" step="0.01">
+                    <span id="unit-display"></span>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn submit-btn" id="submit-answer">تأكيد الإجابة</button>
+                <button class="action-btn next-btn" id="next-question" style="display: none;">السؤال التالي</button>
+            </div>
+
+            <div class="feedback" id="feedback" style="display: none;"></div>
+        </div>
+
+        <!-- شاشة النتائج النهائية -->
+        <div id="results-screen" class="exercise-container" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 20px;">🎯 النتائج النهائية</h2>
+            <div class="final-score" id="final-score-text"></div>
+            <div style="text-align: center; margin: 20px 0;">
+                <div id="performance-message" style="font-size: 1.2em; margin-bottom: 20px;"></div>
+                <div id="detailed-results" style="font-size: 1.1em; line-height: 2;"></div>
+            </div>
+            <div class="action-buttons">
+                <button class="action-btn restart-btn" id="restart-exercises">إعادة التمارين</button>
+                <button class="action-btn submit-btn" id="new-type-btn">نوع تمرين جديد</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // متغيرات عامة
+        let currentExerciseType = '';
+        let currentQuestion = 0;
+        let totalQuestions = 10;
+        let currentScore = 0;
+        let maxScore = 0;
+        let questions = [];
+        let userAnswers = [];
+
+        // رموز الأشكال
+        const shapeIcons = {
+            'cube': '🟫',
+            'box': '📦', 
+            'cylinder': '🥫',
+            'cone': '🎉'
+        };
+
+        const shapeNames = {
+            'cube': 'مكعب',
+            'box': 'متوازي مستطيلات', 
+            'cylinder': 'أسطوانة',
+            'cone': 'مخروط'
+        };
+
+        // بنك الأسئلة
+        const questionBank = {
+            identification: [
+                {
+                    question: "ما نوع هذا الشكل؟",
+                    shape: "cube",
+                    type: "multiple",
+                    options: ["مكعب", "متوازي مستطيلات", "أسطوانة", "مخروط"],
+                    correct: 0,
+                    points: 1
+                },
+                {
+                    question: "أي شكل له قاعدة دائرية وقمة واحدة؟",
+                    shape: "cone",
+                    type: "multiple",
+                    options: ["مكعب", "أسطوانة", "مخروط", "متوازي مستطيلات"],
+                    correct: 2,
+                    points: 1
+                },
+                {
+                    question: "أي شكل له قاعدتان دائريتان متوازيتان؟",
+                    shape: "cylinder",
+                    type: "multiple",
+                    options: ["مخروط", "مكعب", "أسطوانة", "متوازي مستطيلات"],
+                    correct: 2,
+                    points: 1
+                },
+                {
+                    question: "ما الشكل الذي له 6 أوجه مربعة متساوية؟",
+                    shape: "cube",
+                    type: "multiple",
+                    options: ["مكعب", "متوازي مستطيلات", "أسطوانة", "مخروط"],
+                    correct: 0,
+                    points: 1
+                },
+                {
+                    question: "أي شكل له 6 أوجه مستطيلة؟",
+                    shape: "box",
+                    type: "multiple",
+                    options: ["مكعب", "متوازي مستطيلات", "أسطوانة", "مخروط"],
+                    correct: 1,
+                    points: 1
+                }
+            ],
+            
+            properties: [
+                {
+                    question: "كم عدد أوجه المكعب؟",
+                    shape: "cube",
+                    type: "multiple",
+                    options: ["4", "6", "8", "12"],
+                    correct: 1,
+                    points: 1
+                },
+                {
+                    question: "كم عدد رؤوس المكعب؟",
+                    shape: "cube", 
+                    type: "multiple",
+                    options: ["6", "8", "10", "12"],
+                    correct: 1,
+                    points: 1
+                },
+                {
+                    question: "كم عدد حواف الأسطوانة؟",
+                    shape: "cylinder",
+                    type: "multiple",
+                    options: ["0", "1", "2", "3"],
+                    correct: 2,
+                    points: 1
+                },
+                {
+                    question: "كم عدد رؤوس المخروط؟",
+                    shape: "cone",
+                    type: "multiple", 
+                    options: ["0", "1", "2", "3"],
+                    correct: 1,
+                    points: 1
+                },
+                {
+                    question: "كم عدد أوجه متوازي المستطيلات؟",
+                    shape: "box",
+                    type: "multiple",
+                    options: ["4", "6", "8", "10"],
+                    correct: 1,
+                    points: 1
+                }
+            ],
+
+            volume: [
+                {
+                    question: "احسب حجم مكعب طول ضلعه 3 وحدات",
+                    shape: "cube",
+                    type: "input",
+                    formula: "الحجم = الطول³ = 3³",
+                    correct: 27,
+                    unit: "وحدة مكعبة",
+                    points: 2
+                },
+                {
+                    question: "احسب حجم متوازي مستطيلات بأبعاد: الطول=4، العرض=3، الارتفاع=2",
+                    shape: "box",
+                    type: "input", 
+                    formula: "الحجم = الطول × العرض × الارتفاع = 4 × 3 × 2",
+                    correct: 24,
+                    unit: "وحدة مكعبة",
+                    points: 2
+                },
+                {
+                    question: "احسب حجم أسطوانة نصف قطرها 2 وارتفاعها 5 (استخدم π = 3.14)",
+                    shape: "cylinder",
+                    type: "input",
+                    formula: "الحجم = π × نق² × الارتفاع = 3.14 × 2² × 5",
+                    correct: 62.8,
+                    unit: "وحدة مكعبة",
+                    points: 3,
+                    tolerance: 0.1
+                },
+                {
+                    question: "احسب حجم مخروط نصف قطر قاعدته 3 وارتفاعه 4 (استخدم π = 3.14)",
+                    shape: "cone", 
+                    type: "input",
+                    formula: "الحجم = (1/3) × π × نق² × الارتفاع = (1/3) × 3.14 × 3² × 4",
+                    correct: 37.68,
+                    unit: "وحدة مكعبة", 
+                    points: 3,
+                    tolerance: 0.1
+                },
+                {
+                    question: "أيهما أكبر حجماً: مكعب ضلعه 2 أم أسطوانة نصف قطرها 1 وارتفاعها 3؟ (π = 3.14)",
+                    shape: "mixed",
+                    type: "multiple",
+                    options: ["المكعب (8)", "الأسطوانة (9.42)", "متساويان", "لا يمكن المقارنة"],
+                    correct: 1,
+                    points: 2
+                }
+            ],
+
+            surface: [
+                {
+                    question: "احسب المساحة الكلية لمكعب طول ضلعه 4 وحدات",
+                    shape: "cube",
+                    type: "input",
+                    formula: "المساحة = 6 × الطول² = 6 × 4²",
+                    correct: 96,
+                    unit: "وحدة مربعة",
+                    points: 2
+                },
+                {
+                    question: "احسب المساحة الكلية لمتوازي مستطيلات بأبعاد: 5×3×2",
+                    shape: "box",
+                    type: "input",
+                    formula: "المساحة = 2(طول×عرض + طول×ارتفاع + عرض×ارتفاع) = 2(15+10+6)",
+                    correct: 62,
+                    unit: "وحدة مربعة", 
+                    points: 3
+                },
+                {
+                    question: "احسب المساحة الكلية لأسطوانة نصف قطرها 3 وارتفاعها 4 (π = 3.14)",
+                    shape: "cylinder",
+                    type: "input",
+                    formula: "المساحة = 2π × نق × (نق + الارتفاع) = 2 × 3.14 × 3 × 7",
+                    correct: 131.88,
+                    unit: "وحدة مربعة",
+                    points: 3,
+                    tolerance: 0.1
+                },
+                {
+                    question: "المساحة الجانبية للمخروط تحسب بالقانون: π × نق × الراسم، إذا كان نصف القطر 2 والراسم 5 (π = 3.14)",
+                    shape: "cone",
+                    type: "input", 
+                    formula: "المساحة الجانبية = π × نق × الراسم = 3.14 × 2 × 5",
+                    correct: 31.4,
+                    unit: "وحدة مربعة",
+                    points: 3,
+                    tolerance: 0.1
+                }
+            ]
+        };
+
+        // الأحداث الأساسية
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // أزرار التحكم الرئيسية
+            document.getElementById('start-btn').addEventListener('click', showExerciseSelection);
+            document.getElementById('settings-btn').addEventListener('click', showSettings);
+            document.getElementById('help-btn').addEventListener('click', showHelp);
+
+            // اختيار نوع التمرين
+            document.querySelectorAll('.exercise-type').forEach(type => {
+                type.addEventListener('click', function() {
+                    document.querySelectorAll('.exercise-type').forEach(t => t.classList.remove('selected'));
+                    this.classList.add('selected');
+                    currentExerciseType = this.dataset.type;
+                    document.getElementById('select-type-btn').disabled = false;
+                });
+            });
+
+            document.getElementById('select-type-btn').addEventListener('click', startExercises);
+
+            // أزرار التمارين
+            document.getElementById('submit-answer').addEventListener('click', submitAnswer);
+            document.getElementById('next-question').addEventListener('click', nextQuestion);
+            document.getElementById('restart-exercises').addEventListener('click', restartExercises);
+            document.getElementById('new-type-btn').addEventListener('click', showExerciseSelection);
+        }
+
+        function showExerciseSelection() {
+            document.getElementById('exercise-selection').style.display = 'block';
+            document.getElementById('exercise-area').style.display = 'none';
+            document.getElementById('results-screen').style.display = 'none';
+        }
+
+        function startExercises() {
+            if (!currentExerciseType) return;
+
+            // إخفاء شاشة الاختيار وإظهار التمارين
+            document.getElementById('exercise-selection').style.display = 'none';
+            document.getElementById('exercise-area').style.display = 'block';
+
+            // إعداد التمارين
+            generateQuestions();
+            currentQuestion = 0;
+            currentScore = 0;
+            userAnswers = [];
+            
+            // تحديث العدادات
+            document.getElementById('total-questions').textContent = totalQuestions;
+            document.getElementById('current-score').textContent = currentScore;
+            document.getElementById('max-score').textContent = calculateMaxScore();
+
+            // بدء أول سؤال
+            showQuestion();
+        }
+
+        function generateQuestions() {
+            questions = [];
+            
+            if (currentExerciseType === 'mixed') {
+                // تمارين متنوعة من جميع الأنواع
+                const allTypes = ['identification', 'properties', 'volume', 'surface'];
+                for (let i = 0; i < totalQuestions; i++) {
+                    const randomType = allTypes[Math.floor(Math.random() * allTypes.length)];
+                    const typeQuestions = questionBank[randomType];
+                    const randomQuestion = typeQuestions[Math.floor(Math.random() * typeQuestions.length)];
+                    questions.push({...randomQuestion, category: randomType});
+                }
+            } else {
+                // تمارين من نوع محدد
+                const typeQuestions = questionBank[currentExerciseType];
+                for (let i = 0; i < totalQuestions && i < typeQuestions.length; i++) {
+                    questions.push({...typeQuestions[i], category: currentExerciseType});
+                }
+                
+                // إذا كانت الأسئلة أقل من المطلوب، كرر بعضها
+                while (questions.length < totalQuestions) {
+                    const randomQuestion = typeQuestions[Math.floor(Math.random() * typeQuestions.length)];
+                    questions.push({...randomQuestion, category: currentExerciseType});
+                }
+            }
+        }
+
+        function calculateMaxScore() {
+            return questions.reduce((total, q) => total + q.points, 0);
+        }
+
+        function showQuestion() {
+            if (currentQuestion >= questions.length) {
+                showResults();
+                return;
+            }
+
+            const question = questions[currentQuestion];
+            
+            // تحديث العدادات
+            document.getElementById('current-question').textContent = currentQuestion + 1;
+            updateProgress();
+
+            // عرض السؤال
+            document.getElementById('question-text').textContent = question.question;
+            document.getElementById('question-image').textContent = shapeIcons[question.shape] || '❓';
+
+            // عرض القانون إذا كان موجوداً
+            const formulaDisplay = document.getElementById('formula-display');
+            if (question.formula) {
+                formulaDisplay.textContent = question.formula;
+                formulaDisplay.style.display = 'block';
+            } else {
+                formulaDisplay.style.display = 'none';
+            }
+
+            // إخفاء عناصر التفاعل السابقة
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('next-question').style.display = 'none';
+            document.getElementById('submit-answer').style.display = 'inline-block';
+            document.getElementById('submit-answer').disabled = false;
+
+            // عرض الخيارات أو مربع الإدخال
+            if (question.type === 'multiple') {
+                showMultipleChoice(question);
+            } else if (question.type === 'input') {
+                showInputField(question);
+            }
+        }
+
+        function showMultipleChoice(question) {
+            document.getElementById('options-container').style.display = 'grid';
+            document.getElementById('input-container').style.display = 'none';
+
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.dataset.index = index;
+                optionDiv.addEventListener('click', function() {
+                    document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+                optionsContainer.appendChild(optionDiv);
+            });
+        }
+
+        function showInputField(question) {
+            document.getElementById('options-container').style.display = 'none';
+            document.getElementById('input-container').style.display = 'block';
+
+            const input = document.getElementById('answer-input');
+            const unit = document.getElementById('unit-display');
+            
+            input.value = '';
+            unit.textContent = question.unit || '';
+            input.focus();
+
+            // السماح بالإرسال بالضغط على Enter
+            input.onkeypress = function(e) {
+                if (e.key === 'Enter') {
+                    submitAnswer();
+                }
+            };
+        }
+
+        function submitAnswer() {
+            const question = questions[currentQuestion];
+            let userAnswer = null;
+            let isCorrect = false;
+
+            if (question.type === 'multiple') {
+                const selectedOption = document.querySelector('.option.selected');
+                if (!selectedOption) {
+                    alert('يرجى اختيار إجابة');
+                    return;
+                }
+                userAnswer = parseInt(selectedOption.dataset.index);
+                isCorrect = userAnswer === question.correct;
+            } else if (question.type === 'input') {
+                const input = document.getElementById('answer-input');
+                if (!input.value.trim()) {
+                    alert('يرجى إدخال إجابة');
+                    return;
+                }
+                userAnswer = parseFloat(input.value);
+                
+                // التحقق من الإجابة مع التسامح في الخطأ
+                const tolerance = question.tolerance || 0.01;
+                isCorrect = Math.abs(userAnswer - question.correct) <= tolerance;
+            }
+
+            // حفظ إجابة المستخدم
+            userAnswers.push({
+                question: question.question,
+                userAnswer: userAnswer,
+                correctAnswer: question.correct,
+                isCorrect: isCorrect,
+                points: isCorrect ? question.points : 0,
+                maxPoints: question.points
+            });
+
+            // تحديث النتيجة
+            if (isCorrect) {
+                currentScore += question.points;
+            }
+
+            // عرض التغذية الراجعة
+            showFeedback(isCorrect, question);
+
+            // تحديث عرض النتيجة
+            document.getElementById('current-score').textContent = currentScore;
+
+            // إخفاء زر الإرسال وإظهار زر التالي
+            document.getElementById('submit-answer').style.display = 'none';
+            document.getElementById('next-question').style.display = 'inline-block';
+        }
+
+        function showFeedback(isCorrect, question) {
+            const feedback = document.getElementById('feedback');
+            feedback.style.display = 'block';
+
+            if (isCorrect) {
+                feedback.className = 'feedback correct';
+                feedback.innerHTML = `
+                    <div>🎉 إجابة صحيحة!</div>
+                    <div>حصلت على ${question.points} ${question.points === 1 ? 'نقطة' : 'نقاط'}</div>
+                `;
+            } else {
+                feedback.className = 'feedback wrong';
+                let correctText = '';
+                if (question.type === 'multiple') {
+                    correctText = question.options[question.correct];
+                } else {
+                    correctText = question.correct + (question.unit ? ' ' + question.unit : '');
+                }
+                
+                feedback.innerHTML = `
+                    <div>❌ إجابة خاطئة</div>
+                    <div>الإجابة الصحيحة: ${correctText}</div>
+                    ${question.formula ? <div style="margin-top: 10px; font-size: 0.9em;">التفسير: ${question.formula}</div> : ''}
+                `;
+            }
+
+            // تلوين الخيارات في الأسئلة متعددة الاختيارات
+            if (question.type === 'multiple') {
+                const options = document.querySelectorAll('.option');
+                options[question.correct].classList.add('correct');
+                
+                const selectedOption = document.querySelector('.option.selected');
+                if (selectedOption && !isCorrect) {
+                    selectedOption.classList.add('wrong');
+                }
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            showQuestion();
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion) / questions.length) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+        }
+
+        function showResults() {
+            document.getElementById('exercise-area').style.display = 'none';
+            document.getElementById('results-screen').style.display = 'block';
+
+            const percentage = (currentScore / calculateMaxScore()) * 100;
+            const finalScore = document.getElementById('final-score-text');
+            const performanceMessage = document.getElementById('performance-message');
+            
+            // تحديد مستوى الأداء
+            let scoreClass = '';
+            let message = '';
+            
+            if (percentage >= 90) {
+                scoreClass = 'score-excellent';
+                message = '🏆 ممتاز! أداء رائع جداً!';
+            } else if (percentage >= 75) {
+                scoreClass = 'score-good';
+                message = '👏 جيد جداً! استمر في التقدم!';
+            } else if (percentage >= 60) {
+                scoreClass = 'score-good';
+                message = '👍 جيد! يمكنك تحسين أكثر!';
+            } else {
+                scoreClass = 'score-needs-improvement';
+                message = '💪 تحتاج إلى مراجعة المادة أكثر!';
+            }
+
+            finalScore.className = final-score ${scoreClass};
+            finalScore.textContent = ${currentScore}/${calculateMaxScore()} (${percentage.toFixed(1)}%);
+            performanceMessage.textContent = message;
+
+            // عرض التفاصيل
+            showDetailedResults();
+        }
+
+        function showDetailedResults() {
+            const detailedResults = document.getElementById('detailed-results');
+            let correctAnswers = userAnswers.filter(a => a.isCorrect).length;
+            let wrongAnswers = userAnswers.length - correctAnswers;
+
+            let resultHTML = `
+                <div style="margin-bottom: 15px;">
+                    <strong>إجمالي الأسئلة:</strong> ${userAnswers.length}<br>
+                    <strong>الإجابات الصحيحة:</strong> ${correctAnswers}<br>
+                    <strong>الإجابات الخاطئة:</strong> ${wrongAnswers}<br>
+                    <strong>معدل النجاح:</strong> ${((correctAnswers/userAnswers.length)*100).toFixed(1)}%
+                </div>
+            `;
+
+            // تحليل الأداء حسب الفئات
+            const categoryAnalysis = {};
+            userAnswers.forEach(answer => {
+                const question = questions.find(q => q.question === answer.question);
+                const category = question ? question.category : 'غير محدد';
+                
+                if (!categoryAnalysis[category]) {
+                    categoryAnalysis[category] = { correct: 0, total: 0 };
+                }
+                categoryAnalysis[category].total++;
+                if (answer.isCorrect) {
+                    categoryAnalysis[category].correct++;
+                }
+            });
+
+            const categoryNames = {
+                'identification': 'تحديد الأشكال',
+                'properties': 'خصائص الأشكال',
+                'volume': 'حساب الحجم',
+                'surface': 'المساحة السطحية'
+            };
+
+            if (Object.keys(categoryAnalysis).length > 1) {
+                resultHTML += '<div style="margin-top: 20px;"><strong>تحليل الأداء حسب الفئات:</strong></div>';
+                for (const [category, data] of Object.entries(categoryAnalysis)) {
+                    const categoryName = categoryNames[category] || category;
+                    const percentage = (data.correct / data.total) * 100;
+                    resultHTML += `
+                        <div style="margin: 5px 0;">
+                            ${categoryName}: ${data.correct}/${data.total} (${percentage.toFixed(1)}%)
+                        </div>
+                    `;
+                }
+            }
+
+            detailedResults.innerHTML = resultHTML;
+        }
+
+        function restartExercises() {
+            startExercises();
+        }
+
+        function showSettings() {
+            alert('إعدادات التمارين ستكون متاحة قريباً!\n\nحالياً يمكنك:\n- اختيار نوع التمارين\n- مراجعة النتائج التفصيلية\n- إعادة التمارين');
+        }
+
+        function showHelp() {
+            const helpMessage = `
+🔍 دليل استخدام التمارين:
+
+📚 أنواع التمارين:
+• تحديد الأشكال: تعرف على أنواع المجسمات
+• خصائص الأشكال: عدد الأوجه والحواف والرؤوس  
+• حساب الحجم: تطبيق القوانين الرياضية
+• المساحة السطحية: حساب المساحة الكلية
+• تمارين متنوعة: مزيج من جميع الأنواع
+
+🎯 طريقة الاستخدام:
+1. اختر نوع التمرين المطلوب
+2. أجب على الأسئلة بعناية
+3. راجع التغذية الراجعة
+4. تحقق من النتائج النهائية
+
+💡 نصائح للنجاح:
+• راجع القوانين الرياضية أولاً
+• انتبه للوحدات في المسائل الحسابية
+• استخدم π = 3.14 في الحسابات
+• لا تتردد في إعادة التمارين للتحسن
+            `;
+            alert(helpMessage);
+        }
+    </script>
+</body>
+</html>
